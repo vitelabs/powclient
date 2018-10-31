@@ -19,9 +19,4 @@ var (
 		ErrMsg: errors.New("the length is not enough"),
 		Code:   -20010,
 	}
-
-	ErrLengthOfHashIncorrect = PowError{
-		ErrMsg: errors.New("the length doesn't match hash_size"),
-		Code:   -20011,
-	}
 )

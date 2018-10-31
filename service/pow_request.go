@@ -2,10 +2,7 @@ package service
 
 import (
 	"bytes"
-	"encoding/hex"
 	"encoding/json"
-	"fmt"
-	"github.com/vitelabs/go-vite/common/helper"
 	"github.com/vitelabs/go-vite/common/types"
 	"github.com/vitelabs/go-vite/log15"
 	"io/ioutil"
@@ -17,8 +14,8 @@ var (
 	requestUrl   string
 )
 
-func InitUrl(url string) {
-	requestUrl = url
+func InitUrl(ip string) {
+	requestUrl = "http://" + ip + ":7076"
 }
 
 func GetData(addr types.Address, preHash types.Hash) types.Hash {
@@ -69,12 +66,12 @@ type workValidateResult struct {
 	Valid string `json:"valid"`
 }
 
-func VaildateWork(dataHash string, threshold string, work []byte) (bool, error) {
+func VaildateWork(dataHash string, threshold string, work string) (bool, error) {
 	wg := &workValidate{
 		Action:    "work_validate",
 		DataHash:  dataHash,
 		Threshold: threshold,
-		Work:      hex.EncodeToString(work),
+		Work:      work,
 	}
 	bytesData, err := json.Marshal(wg)
 	if err != nil {
@@ -135,6 +132,5 @@ func httpRequest(bytesData []byte) ([]byte, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
-	fmt.Println(helper.BytesToString(body))
 	return body, nil
 }

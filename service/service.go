@@ -3,7 +3,6 @@ package service
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/vitelabs/go-vite/common/types"
-	"math/big"
 	"powClient/service/context"
 	"powClient/util"
 	"strconv"
@@ -13,18 +12,15 @@ const (
 	FullThreshold = 0xffffffc000000000
 )
 
-var DefaultDifficulty = new(big.Int).SetUint64(FullThreshold)
-
 func WorkDetail(c *gin.Context) {
 	var generateContext context.GenerateContext
-
 	if err := c.Bind(&generateContext); err != nil {
 		util.RespondError(c, 400, err)
 		return
 	}
-	dataHash := []byte(generateContext.DataHash)
-	if len(dataHash) != types.HashSize {
-		util.RespondFailed(c, util.ErrLengthOfHashIncorrect.Code, util.ErrLengthOfHashIncorrect.ErrMsg, "")
+
+	if len([]byte(generateContext.DataHash)) < types.HashSize {
+		util.RespondFailed(c, util.ErrLengthNotEnough.Code, util.ErrLengthNotEnough.ErrMsg, "")
 		return
 	}
 
@@ -39,12 +35,8 @@ func WorkDetail(c *gin.Context) {
 		util.RespondFailed(c, util.ErrServerPostFailed.Code, err, "")
 		return
 	}
-	if len(work) < 8 {
-		util.RespondFailed(c, util.ErrLengthNotEnough.Code, util.ErrLengthNotEnough.ErrMsg, "")
-		return
-	}
 	generateResult := &context.GenerateResult{
-		Work: work[:8],
+		Work: work,
 	}
 	util.RespondSuccess(c, generateResult, "")
 	return
@@ -56,14 +48,13 @@ func VaildDetail(c *gin.Context) {
 		util.RespondError(c, 400, err)
 		return
 	}
-	work := []byte(validateContext.Work)
-	if len(work) < 8 {
+
+	if len([]byte(validateContext.Work)) < 8 {
 		util.RespondFailed(c, util.ErrLengthNotEnough.Code, util.ErrLengthNotEnough.ErrMsg, "")
 		return
 	}
-	dataHash := []byte(validateContext.DataHash)
-	if len(dataHash) != types.HashSize {
-		util.RespondFailed(c, util.ErrLengthOfHashIncorrect.Code, util.ErrLengthOfHashIncorrect.ErrMsg, "")
+	if len([]byte(validateContext.DataHash)) < types.HashSize {
+		util.RespondFailed(c, util.ErrLengthNotEnough.Code, util.ErrLengthNotEnough.ErrMsg, "")
 		return
 	}
 
@@ -73,7 +64,8 @@ func VaildDetail(c *gin.Context) {
 	} else {
 		difficulty = *validateContext.Threshold
 	}
-	vaild, err := VaildateWork(validateContext.DataHash, difficulty, work[0:8])
+
+	vaild, err := VaildateWork(validateContext.DataHash, difficulty, validateContext.Work)
 	if err != nil {
 		util.RespondFailed(c, util.ErrServerPostFailed.Code, util.ErrServerPostFailed.ErrMsg, "")
 		return
@@ -93,11 +85,6 @@ func CancelDetail(c *gin.Context) {
 	var cancelContext context.CancelContext
 	if err := c.Bind(&cancelContext); err != nil {
 		util.RespondError(c, 400, err)
-		return
-	}
-	dataHash := []byte(cancelContext.DataHash)
-	if len(dataHash) != types.HashSize {
-		util.RespondFailed(c, util.ErrLengthOfHashIncorrect.Code, util.ErrLengthOfHashIncorrect.ErrMsg, "")
 		return
 	}
 
