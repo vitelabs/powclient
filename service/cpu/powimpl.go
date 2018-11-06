@@ -1,6 +1,7 @@
 package cpu
 
 import (
+	"encoding/binary"
 	"errors"
 	"github.com/vitelabs/go-vite/common/helper"
 	"github.com/vitelabs/go-vite/common/types"
@@ -8,9 +9,10 @@ import (
 	"github.com/vitelabs/go-vite/pow"
 	"golang.org/x/crypto/blake2b"
 	"math/big"
+	"strconv"
 )
 
-func GetPowNonce(threshold *big.Int, dataHash types.Hash) ([]byte, error) {
+func GetPowNonce(threshold *big.Int, dataHash types.Hash) (*string, error) {
 
 	if threshold == nil {
 		return nil, errors.New("threshold can't be nil")
@@ -25,7 +27,8 @@ func GetPowNonce(threshold *big.Int, dataHash types.Hash) ([]byte, error) {
 		nonce := crypto.GetEntropyCSPRNG(8)
 		out := powHash256(nonce, data)
 		if pow.QuickGreater(out, target256) {
-			return nonce, nil
+			hexNonce := strconv.FormatUint(binary.LittleEndian.Uint64(nonce), 16)
+			return &hexNonce, nil
 		}
 	}
 	return nil, errors.New("get pow nonce error")
