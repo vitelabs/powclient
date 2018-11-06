@@ -8,7 +8,7 @@ import (
 
 var (
 	env   = flag.String("env", "127:0:0:1", "env ip")
-	mtype = flag.String("type", "cpu", "machine type")
+	mtype = flag.String("type", "gpu", "machine type")
 )
 
 func main() {
