@@ -1,11 +1,11 @@
-package powClient
+package powclient
 
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/vitelabs/go-vite/log15"
-	"powClient/service/cpu"
-	"powClient/service/gpu"
+	"github.com/vitelabs/powclient/service/cpu"
+	"github.com/vitelabs/powclient/service/gpu"
 )
 
 var (

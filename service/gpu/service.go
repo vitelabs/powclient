@@ -3,8 +3,8 @@ package gpu
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/vitelabs/go-vite/common/types"
-	"powClient/service/context"
-	"powClient/util"
+	"github.com/vitelabs/powclient/service/context"
+	"github.com/vitelabs/powclient/util"
 	"strconv"
 )
 
