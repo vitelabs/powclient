@@ -1,0 +1,28 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+.idea
+.DS_Store
+gvite
+
+# Test binary, build with `go test -c`
+*.test
+testdata/trie
+testdata/vm_context
+testdata/ledger
+testdata/ledger_file
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Leveldb database files for test, put it here temporarily
+vite_leveldb_database
+vite.p2p.db
+
+# idea files
+.idea/
+
+build/
