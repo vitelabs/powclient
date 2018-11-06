@@ -1,9 +1,8 @@
-package service
+package gpu
 
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/vitelabs/go-vite/common/types"
 	"github.com/vitelabs/go-vite/log15"
 	"io/ioutil"
 	"net/http"
@@ -18,10 +17,6 @@ func InitUrl(ip string) {
 	requestUrl = "http://" + ip + ":7076"
 }
 
-func GetData(addr types.Address, preHash types.Hash) types.Hash {
-	return types.DataListHash(addr.Bytes(), preHash.Bytes())
-}
-
 type workGenerate struct {
 	Action    string `json:"action"`
 	DataHash  string `json:"hash"`
@@ -29,10 +24,10 @@ type workGenerate struct {
 }
 
 type workGenerateResult struct {
-	Work []byte `json:"work"`
+	Work string `json:"work"`
 }
 
-func GenerateWork(dataHash string, threshold string) ([]byte, error) {
+func GenerateWork(dataHash string, threshold string) (*string, error) {
 	wg := &workGenerate{
 		Action:    "work_generate",
 		Threshold: threshold,
@@ -52,7 +47,7 @@ func GenerateWork(dataHash string, threshold string) ([]byte, error) {
 	if err := json.Unmarshal(body, workResult); err != nil {
 		return nil, err
 	}
-	return workResult.Work, nil
+	return &workResult.Work, nil
 }
 
 type workValidate struct {

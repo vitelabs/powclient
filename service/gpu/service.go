@@ -1,4 +1,4 @@
-package service
+package gpu
 
 import (
 	"github.com/gin-gonic/gin"
@@ -36,7 +36,7 @@ func WorkDetail(c *gin.Context) {
 		return
 	}
 	generateResult := &context.GenerateResult{
-		Work: work,
+		Work: *work,
 	}
 	util.RespondSuccess(c, generateResult, "")
 	return

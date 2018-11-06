@@ -2,12 +2,22 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"powClient"
 )
 
-var env = flag.String("env", "127:0:0:1", "env ip")
+var (
+	env   = flag.String("env", "127:0:0:1", "env ip")
+	mtype = flag.String("type", "gpu", "machine type")
+)
 
 func main() {
 	flag.Parse()
-	powClient.StartUp(*env)
+	if *mtype == "gpu" {
+		powClient.StartUpGpu(*env)
+	}
+	if *mtype == "cpu" {
+		powClient.StartUpCpu(*env)
+	}
+	fmt.Print("type error")
 }

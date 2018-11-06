@@ -1,12 +1,11 @@
 package context
 
 import (
-	"encoding/hex"
 	"github.com/gin-gonic/gin"
 )
 
 type GenerateResult struct {
-	Work []byte `json:"work"`
+	Work string `json:"work"`
 }
 
 type ValidateResult struct {
@@ -18,7 +17,7 @@ type CancelResult struct {
 
 func (result *GenerateResult) ToResponse() gin.H {
 	return gin.H{
-		"work": hex.EncodeToString(result.Work),
+		"work": result.Work,
 	}
 }
 
