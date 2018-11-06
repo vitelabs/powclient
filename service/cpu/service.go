@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/vitelabs/go-vite/common/types"
 	"math/big"
-	"powClient/service/context"
-	"powClient/util"
+	"github.com/vitelabs/powclient/service/context"
+	"github.com/vitelabs/powclient/util"
 )
 
 func WorkDetail(c *gin.Context) {

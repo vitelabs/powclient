@@ -3,21 +3,21 @@ package main
 import (
 	"flag"
 	"fmt"
-	"powClient"
+	"github.com/vitelabs/powclient"
 )
 
 var (
 	env   = flag.String("env", "127:0:0:1", "env ip")
-	mtype = flag.String("type", "gpu", "machine type")
+	mtype = flag.String("type", "cpu", "machine type")
 )
 
 func main() {
 	flag.Parse()
 	if *mtype == "gpu" {
-		powClient.StartUpGpu(*env)
+		powclient.StartUpGpu(*env)
 	}
 	if *mtype == "cpu" {
-		powClient.StartUpCpu(*env)
+		powclient.StartUpCpu(*env)
 	}
 	fmt.Print("type error")
 }
