@@ -3,12 +3,18 @@ package cpu
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/vitelabs/go-vite/common/types"
-	"math/big"
+	"github.com/vitelabs/powclient/metrics"
 	"github.com/vitelabs/powclient/service/context"
 	"github.com/vitelabs/powclient/util"
+	"math/big"
+	"time"
 )
 
 func WorkDetail(c *gin.Context) {
+	var tagsNames []string
+	tagsNames = append(tagsNames, "pow", "cpu", "GetPowNonce")
+	defer metrics.TimeConsuming(tagsNames, time.Now())
+
 	var generateContext context.GenerateContext
 	if err := c.Bind(&generateContext); err != nil {
 		util.RespondError(c, 400, err)

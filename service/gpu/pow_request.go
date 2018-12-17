@@ -3,18 +3,16 @@ package gpu
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/vitelabs/go-vite/log15"
 	"io/ioutil"
 	"net/http"
 )
 
 var (
-	powClientLog = log15.New("module", "pow_request")
-	requestUrl   string
+	requestUrl string
 )
 
 func InitUrl(ip string) {
-	requestUrl = "http://" + ip + ":7076"
+	requestUrl = "http://" + ip
 }
 
 type workGenerate struct {
@@ -119,9 +117,9 @@ func httpRequest(bytesData []byte) ([]byte, error) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
+		log.Info("request failed", "error", err)
 		return nil, err
 	}
-	powClientLog.Info("Response Status:", resp.Status)
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err

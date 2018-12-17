@@ -2,22 +2,28 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"github.com/vitelabs/powclient"
+	"github.com/vitelabs/powclient/log15"
+	"github.com/vitelabs/powclient/metrics"
 )
 
-var (
-	env   = flag.String("env", "127:0:0:1", "env ip")
-	mtype = flag.String("type", "gpu", "machine type")
-)
+var log = log15.New("module", "main")
 
 func main() {
 	flag.Parse()
-	if *mtype == "gpu" {
-		powclient.StartUpGpu(*env)
+	InitLog(DefaultDataDir(), "info")
+
+	metrics.InitMetrics(*metricsEnable, *metricsEnable)
+	if *metricsEnable == true {
+		powclient.SetUpMetrics(*influxDBUrl)
 	}
-	if *mtype == "cpu" {
-		powclient.StartUpCpu(*env)
+	switch *mtype {
+	case "gpu":
+		powclient.StartUpGpu(*serverUrl)
+	case "cpu":
+		powclient.StartUpCpu(*serverUrl)
+	default:
+		log.Error("processor type error")
+		return
 	}
-	fmt.Print("type error")
 }

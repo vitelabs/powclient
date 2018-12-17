@@ -3,16 +3,25 @@ package gpu
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/vitelabs/go-vite/common/types"
+	"github.com/vitelabs/powclient/log15"
+	"github.com/vitelabs/powclient/metrics"
 	"github.com/vitelabs/powclient/service/context"
 	"github.com/vitelabs/powclient/util"
 	"strconv"
+	"time"
 )
 
 const (
 	FullThreshold = 0xffffffc000000000
 )
 
+var log = log15.New("module", "service_gpu")
+
 func WorkDetail(c *gin.Context) {
+	var tagsNames []string
+	tagsNames = append(tagsNames, "pow", "gpu", "WorkDetail")
+	defer metrics.TimeConsuming(tagsNames, time.Now())
+
 	var generateContext context.GenerateContext
 	if err := c.Bind(&generateContext); err != nil {
 		util.RespondError(c, 400, err)
@@ -43,6 +52,10 @@ func WorkDetail(c *gin.Context) {
 }
 
 func VaildDetail(c *gin.Context) {
+	var tagsNames []string
+	tagsNames = append(tagsNames, "pow", "gpu", "VaildDetails")
+	defer metrics.TimeConsuming(tagsNames, time.Now())
+
 	var validateContext context.ValidateContext
 	if err := c.Bind(&validateContext); err != nil {
 		util.RespondError(c, 400, err)
@@ -82,6 +95,10 @@ func VaildDetail(c *gin.Context) {
 }
 
 func CancelDetail(c *gin.Context) {
+	var tagsNames []string
+	tagsNames = append(tagsNames, "pow", "gpu", "CancelDetail")
+	defer metrics.TimeConsuming(tagsNames, time.Now())
+
 	var cancelContext context.CancelContext
 	if err := c.Bind(&cancelContext); err != nil {
 		util.RespondError(c, 400, err)
